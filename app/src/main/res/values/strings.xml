@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">XAssistant</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="stringTitle">账号解绑</string>
+    <string name="stringBtnSend">发送解绑请求</string>
+    <string name="stringPromtNum">请输入需要解绑的账号</string>
+    <string name="stringListTitle">最近请求列表</string>
+</resources>

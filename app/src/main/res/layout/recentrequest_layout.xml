@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="4dp"
+    android:paddingLeft="12dp"
+    android:paddingRight="12dp">
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/requestState"
+        android:paddingTop="3dp"
+        android:paddingLeft="6dp"
+        android:layout_alignParentLeft="true" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/requestState"
+        android:paddingTop="3dp"
+        android:paddingLeft="5dp"
+        android:textSize="20dp"
+        android:id="@+id/requestType"
+        android:text="解绑："
+        android:textColor="@android:color/holo_orange_dark" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:id="@+id/requestNum"
+        android:text="18908259191"
+        android:textSize="19dp"
+        android:textColor="@android:color/holo_orange_light"
+        android:layout_toRightOf="@+id/requestType"
+        android:layout_toEndOf="@+id/requestType" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/requestType"
+        android:layout_toRightOf="@id/requestState"
+        android:paddingLeft="5dp"
+        android:textSize="9dp"
+        android:id="@+id/requestTime"
+        android:textColor="@android:color/darker_gray"
+        android:text="2015-3-25" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/requestType"
+        android:layout_toRightOf="@id/requestTime"
+        android:paddingLeft="8dp"
+        android:textSize="9dp"
+        android:id="@+id/requestResult"
+        android:text="等待处理..."
+        android:textColor="@android:color/holo_blue_dark" />
+</RelativeLayout>

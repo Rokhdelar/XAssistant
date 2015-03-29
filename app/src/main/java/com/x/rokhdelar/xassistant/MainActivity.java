@@ -1,11 +1,13 @@
 package com.x.rokhdelar.xassistant;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.StrictMode;
-import android.provider.BaseColumns;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.telephony.TelephonyManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,21 +32,22 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends Activity {
 
     private ArrayList<HashMap<String,Object>> recentRequest = new ArrayList<>();
     private ListView lvRecentRequest;
     private EditText etRequestNum;
-    private Button btnSend;
+    private Button btnSend,btnRefresh;
+    private String MEID;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        /*
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
                     .detectDiskReads().detectDiskWrites().detectNetwork()
                     .penaltyLog().build());
@@ -52,73 +55,55 @@ public class MainActivity extends ActionBarActivity {
         StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
                     .detectLeakedSqlLiteObjects().penaltyLog().penaltyDeath()
                     .build());
+        */
 
-
+        MEID=getMEID();
         btnSend=(Button)findViewById(R.id.btnSend);
+        btnSend.setEnabled(false);
         etRequestNum =(EditText)findViewById(R.id.etRequestNum);
+        etRequestNum.setEnabled(false);
         lvRecentRequest = (ListView)findViewById(R.id.lvRequest);
+        btnRefresh = (Button)findViewById(R.id.btnRefresh);
+        btnRefresh.setEnabled(false);
+
+        ValidTask validTask=new ValidTask();
+        validTask.execute("validByMEID",MEID);
 
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String requestNum=etRequestNum.getText().toString();
                 if(requestNum.length()>0){  //后续增加帐号有效性的判断。
-                    sendRequest(requestNum,"请解绑","18908259191","");
+                    etRequestNum.setText("");
+                    AddRequestTask addRequestTask=new AddRequestTask();
+                    addRequestTask.execute(requestNum,"请解绑。",MEID,"");
                 }
+            }
+        });
+
+        btnRefresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GetRequestTask getRequestTask=new GetRequestTask();
+                getRequestTask.execute("getRequestByMEID",MEID);
+
             }
         });
 
         //获取本机号码发出的请求列表。
 
-        List<BasicNameValuePair> params = new LinkedList<>();
-        params.add(new BasicNameValuePair("action","getRequestByPhone"));
-        params.add(new BasicNameValuePair("phone","18908259191"));
-
-        String param = URLEncodedUtils.format(params, "UTF-8");
-
-        String baseUrl = "http://61.128.177.92/webbind/request.php";
-        String url = baseUrl+"?"+param;
-        CommunicationTask communicationTask = new CommunicationTask();
-        communicationTask.execute(url);
+        GetRequestTask getRequestTask = new GetRequestTask();
+        getRequestTask.execute("getRequestByMEID",MEID);
 
     }
 
 
-    private void sendRequest(String requestNum,String requestInfo,String phone,String memo)
-    {
-        //调用HTTPClient对象发送请求。
-        List<BasicNameValuePair> params = new LinkedList<>();
-        params.add(new BasicNameValuePair("action","addRequest"));
-        params.add(new BasicNameValuePair("requestType","解绑"));
-        params.add(new BasicNameValuePair("requestNum",requestNum));
-        params.add(new BasicNameValuePair("requestInfo",requestInfo));
-        params.add(new BasicNameValuePair("phone",phone));
-        params.add(new BasicNameValuePair("memo",memo));
-
-        String param = URLEncodedUtils.format(params,"UTF-8");
-
-        String baseUrl = "http://61.128.177.92/webbind/request.php";
-
-        HttpGet httpGet = new HttpGet(baseUrl+"?"+param);
-
-        HttpClient httpClient = new DefaultHttpClient();
-        try{
-            HttpResponse httpResponse = httpClient.execute(httpGet);
-            if(httpResponse.getStatusLine().getStatusCode()==200){
-                JSONObject jsonObject=new JSONObject(EntityUtils.toString(httpResponse.getEntity()));
-                if(jsonObject.getInt("code") == 200){
-                    Toast.makeText(this,"解绑"+requestNum+"请求发送成功，等待处理...",Toast.LENGTH_LONG).show();
-                }else{
-                    Toast.makeText(this,"解绑"+requestNum+"请求发送失败，服务器返回的错误为："+jsonObject.getString("message"),Toast.LENGTH_LONG).show();
-                }
-            }
-
-//            Log.i("TAG","resultCode:"+httpResponse.getStatusLine().getStatusCode() );
-//            Log.i("TAG","result:"+ EntityUtils.toString(httpResponse.getEntity()));
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+    //获取手机号码。
+    private String getMEID() {
+        TelephonyManager telephonyManager=(TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+        return telephonyManager.getDeviceId();
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -133,21 +118,124 @@ public class MainActivity extends ActionBarActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id){
+            case R.id.action_settings:
+                return true;
+            case R.id.action_register:
+                Intent registerIntent= new Intent(this,RegisterActivity.class);
+                startActivity(registerIntent);
+                break;
+
+
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-
-    private class CommunicationTask extends AsyncTask<String,Integer,String> {
+    private class AddRequestTask extends AsyncTask<String,Integer,String>{
         @Override
         protected String doInBackground(String... params) {
+            //调用HTTPClient对象发送请求。
+            List<BasicNameValuePair> sqlParams = new LinkedList<>();
+            sqlParams.add(new BasicNameValuePair("action","addRequest"));
+            sqlParams.add(new BasicNameValuePair("requestType","解绑"));
+            sqlParams.add(new BasicNameValuePair("requestNum",params[0]));
+            sqlParams.add(new BasicNameValuePair("requestInfo",params[1]));
+            sqlParams.add(new BasicNameValuePair("MEID",params[2]));
+            sqlParams.add(new BasicNameValuePair("memo",params[3]));
+
+            String param = URLEncodedUtils.format(sqlParams,"UTF-8");
+
+            String baseUrl = "http://61.128.177.92/webbind/request.php";
+
+            HttpGet httpGet = new HttpGet(baseUrl+"?"+param);
+
+            HttpClient httpClient = new DefaultHttpClient();
+            try{
+                HttpResponse httpResponse = httpClient.execute(httpGet);
+                if(httpResponse.getStatusLine().getStatusCode()==200){
+                    JSONObject jsonObject=new JSONObject(EntityUtils.toString(httpResponse.getEntity()));
+                    if(jsonObject.getInt("code") == 200){
+                        return "解绑"+params[0]+"请求发送成功，等待处理...";
+                    }else{
+                        return "解绑"+params[0]+"请求发送失败，服务器返回的错误为："+
+                                jsonObject.getString("message");
+                    }
+                }
+
+//            Log.i("TAG","resultCode:"+httpResponse.getStatusLine().getStatusCode() );
+//            Log.i("TAG","result:"+ EntityUtils.toString(httpResponse.getEntity()));
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+        @Override
+        protected void onPostExecute(String s){
+            Toast.makeText(getApplicationContext(),s,Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private class ValidTask extends AsyncTask<String,Integer,String>{
+
+        @Override
+        protected String doInBackground(String... params) {
+            List<BasicNameValuePair> sqlParams = new LinkedList<>();
+            sqlParams.add(new BasicNameValuePair("action",params[0]));
+            sqlParams.add(new BasicNameValuePair("MEID",params[1]));
+
+            String param = URLEncodedUtils.format(sqlParams, "UTF-8");
+
+            String baseUrl = "http://61.128.177.92/webbind/request.php";
+            String url = baseUrl+"?"+param;
             try {
                 HttpClient httpClient = new DefaultHttpClient();
-                HttpGet httpGet = new HttpGet(params[0]);
+                HttpGet httpGet = new HttpGet(url);
+                HttpResponse httpResponse = httpClient.execute(httpGet);
+                if (httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+                    JSONObject jsonObject = new JSONObject(EntityUtils.toString(httpResponse.getEntity()));
+                    if (jsonObject.getInt("code") == 200) {
+                        return "valid";
+                    }else {
+                        return "not valid";
+                    }
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            if (s.equals("valid")){
+                btnSend.setEnabled(true);
+                btnRefresh.setEnabled(true);
+                etRequestNum.setEnabled(true);
+            }else{
+                btnSend.setEnabled(false);
+                btnRefresh.setEnabled(false);
+                etRequestNum.setEnabled(false);
+                Toast.makeText(getApplicationContext(),"对不起，您的手机号不在有效的使用范围内，请先登记通过。",Toast.LENGTH_LONG).show();
+            }
+            super.onPostExecute(s);
+        }
+    }
+    private class GetRequestTask extends AsyncTask<String,Integer,String> {
+        @Override
+        protected String doInBackground(String... params) {
+            List<BasicNameValuePair> sqlParams = new LinkedList<>();
+            sqlParams.add(new BasicNameValuePair("action",params[0]));
+            sqlParams.add(new BasicNameValuePair("MEID",params[1]));
+
+            String param = URLEncodedUtils.format(sqlParams, "UTF-8");
+
+            String baseUrl = "http://61.128.177.92/webbind/request.php";
+            String url = baseUrl+"?"+param;
+            try {
+                HttpClient httpClient = new DefaultHttpClient();
+                HttpGet httpGet = new HttpGet(url);
                 HttpResponse httpResponse = httpClient.execute(httpGet);
                 if (httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK){
                     JSONObject jsonObject = new JSONObject(EntityUtils.toString(httpResponse.getEntity()));

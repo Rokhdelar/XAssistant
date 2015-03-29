@@ -10,7 +10,6 @@
         android:layout_height="wrap_content"
         android:text="@string/stringPromtNum"
         android:id="@+id/tvTitleForNum"
-        android:layout_marginTop="46dp"
         android:layout_below="@+id/imageView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
@@ -27,7 +26,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageView"
-        android:src="@mipmap/ic_title"
+        android:src="@mipmap/ic_launcher"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
@@ -49,15 +48,26 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="30dp" />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnRefresh"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:text="@string/stringBtnRefresh" />
 
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/lvRequest"
         android:layout_below="@+id/textView"
+        android:layout_above="@id/btnRefresh"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:choiceMode="none" />
+        android:choiceMode="none"
+        android:focusableInTouchMode="false" />
+
+
 
 </RelativeLayout>

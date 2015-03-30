@@ -41,21 +41,12 @@ public class MainActivity extends Activity {
     private EditText etRequestNum;
     private Button btnSend,btnRefresh;
     private String MEID;
-
+    private boolean isValid=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        /*
-        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
-                    .detectDiskReads().detectDiskWrites().detectNetwork()
-                    .penaltyLog().build());
-
-        StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
-                    .detectLeakedSqlLiteObjects().penaltyLog().penaltyDeath()
-                    .build());
-        */
 
         MEID=getMEID();
         btnSend=(Button)findViewById(R.id.btnSend);
@@ -122,16 +113,19 @@ public class MainActivity extends Activity {
             case R.id.action_settings:
                 return true;
             case R.id.action_register:
-                Intent registerIntent= new Intent(this,RegisterActivity.class);
-                startActivity(registerIntent);
+                if (isValid){
+                    Toast.makeText(getApplicationContext(),"您已经完成注册了，不需要再次进行注册。",Toast.LENGTH_LONG).show();
+                }else{
+                    Intent registerIntent= new Intent(this,RegisterActivity.class);
+                    startActivity(registerIntent);
+                }
                 break;
-
-
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+    //新增解绑请求
     private class AddRequestTask extends AsyncTask<String,Integer,String>{
         @Override
         protected String doInBackground(String... params) {
@@ -176,7 +170,7 @@ public class MainActivity extends Activity {
             Toast.makeText(getApplicationContext(),s,Toast.LENGTH_LONG).show();
         }
     }
-
+    //验证MEID有效性。
     private class ValidTask extends AsyncTask<String,Integer,String>{
 
         @Override
@@ -213,15 +207,60 @@ public class MainActivity extends Activity {
                 btnSend.setEnabled(true);
                 btnRefresh.setEnabled(true);
                 etRequestNum.setEnabled(true);
+                isValid=true;
+
             }else{
                 btnSend.setEnabled(false);
                 btnRefresh.setEnabled(false);
                 etRequestNum.setEnabled(false);
+                isValid=false;
                 Toast.makeText(getApplicationContext(),"对不起，您的手机号不在有效的使用范围内，请先登记通过。",Toast.LENGTH_LONG).show();
             }
             super.onPostExecute(s);
         }
     }
+    //通知完成以后更新数据库。
+    private class UpdateNotifyTask extends AsyncTask<String,Integer,String>{
+        @Override
+        protected String doInBackground(String... params) {
+            List<BasicNameValuePair> sqlParams=new LinkedList<>();
+            sqlParams.add(new BasicNameValuePair("action",params[0]));
+            sqlParams.add(new BasicNameValuePair("id",params[1]));
+
+            String param = URLEncodedUtils.format(sqlParams, "UTF-8");
+
+            String baseUrl = "http://61.128.177.92/webbind/request.php";
+            String url = baseUrl+"?"+param;
+            try{
+                HttpClient httpClient = new DefaultHttpClient();
+                HttpGet httpGet = new HttpGet(url);
+                HttpResponse httpResponse = httpClient.execute(httpGet);
+                if(httpResponse.getStatusLine().getStatusCode()==HttpStatus.SC_OK){
+                    JSONObject jsonObject = new JSONObject(EntityUtils.toString(httpResponse.getEntity()));
+                    if (jsonObject.getInt("code")==200){
+                        return "success";
+                    }else{
+                        return "fail:"+jsonObject.getString("message");
+                    }
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s){
+            if(s!="success"){
+                Toast.makeText(getApplicationContext(),"执行失败，错误信息为:"+s,Toast.LENGTH_LONG).show();
+            }
+
+            super.onPostExecute(s);
+        }
+
+    }
+    //获取对应MEID的8条请求信息。
     private class GetRequestTask extends AsyncTask<String,Integer,String> {
         @Override
         protected String doInBackground(String... params) {
@@ -260,6 +299,8 @@ public class MainActivity extends Activity {
                             map.put("requestNum",jsonArray.getJSONObject(i).getString("requestNum"));
                             map.put("requestTime","请求时间："+jsonArray.getJSONObject(i).getString("requestTime"));
                             map.put("requestResult","处理状态："+jsonArray.getJSONObject(i).getString("requestState"));
+                            map.put("isNotified",jsonArray.getJSONObject(i).getString("isNotified"));
+                            map.put("id",jsonArray.getJSONObject(i).getInt("id"));
                             recentRequest.add(map);
                         }
                     }
@@ -281,6 +322,16 @@ public class MainActivity extends Activity {
                     new int[]{R.id.requestState,R.id.requestType,R.id.requestNum,R.id.requestTime,R.id.requestResult});
 
             lvRecentRequest.setAdapter(simpleAdapter);
+            //检查是否已经通知，没有通知的发出通知。
+            for(HashMap<String,Object> map:recentRequest){
+                if ((map.get("requestState").toString()=="已处理。") && (map.get("isNotified").toString()=="NO")){
+
+                    //添加通知
+
+                    //更新数据库的isNotified字段.
+                    new UpdateNotifyTask().execute("updateNotified",map.get("id").toString());
+                }
+            }
 
             super.onPostExecute(s);
         }

@@ -1,19 +1,47 @@
 <resources>
-    <string name="app_name">解绑助手</string>
+    <string name="stringModuleBind">帐号解绑处理…</string>
+    <string name="stringModuleFaultDeclaration">故障申告处理…</string>
+    <string name="stringRegister">手机权限注册…</string>
+    <string name="about">关于维护助手…</string>
+
+    <string name="stringModuleBindDesc">宽带帐号解绑请求及结果反馈……</string>
+    <string name="stringModuleFaultDeclarationDesc">大客户故障申告、响应及结果反馈……</string>
+    <string name="stringRegisterDesc">本APP只能经过验证以后才能使用，请在这里进行注册……</string>
+    <string name="stringAboutDesc">对维护助手提出宝贵意见，功能扩展及bug反馈……</string>
+    
+    <string name="app_name">维护助手</string>
     <string name="action_settings">设置</string>
     <string name="stringTitle">账号解绑</string>
     <string name="stringBtnSend">发送解绑请求</string>
     <string name="stringPromtNum">请输入需要解绑的账号</string>
     <string name="stringListTitle">最近请求列表</string>
     <string name="stringBtnRefresh">刷新</string>
+    <string name="hit_Request_Num">请输入您要解绑的帐号。</string>
     <string name="action_register">注册</string>
-    <string name="title_activity_register">请注册...</string>
+    <string name="title_activity_register">请注册…</string>
+    <string name="warnRepeatRegister">您已经完成了注册，不需要重复注册。</string>
+    <string name="warnUnRegister">本APP需要注册才能使用，请先注册，如果已经注册，请联系维护中心确认信息。</string>
+    
 
-    <string name="hello_world">Hello world!</string>
     <string name="tv_title_name">请输入您的姓名：</string>
     <string name="tv_title_phone">请输入您的电话号码：</string>
     <string name="tv_title_substation">请选择您的支局：</string>
     <string name="tv_title_MEID">您电话的MEID为：</string>
     <string name="tv_title_memo">备注：</string>
     <string name="btn_title_register">注册</string>
+    <string name="title_activity_bind">帐号解绑处理</string>
+    <string name="title_activity_fault_report">政企故障申告</string>
+
+    <string name="tv_title_fault_num">请输入故障号码（专线号）：</string>
+    <string name="tv_title_fault_contact">请输入客户联系人：</string>
+    <string name="tv_title_fault_contact_phone">请输入客户联系电话：</string>
+    <string name="tv_title_fault_info">故障现象：</string>
+    <string name="btn_fault_send">申告</string>
+
+    <string name="title_fault_report">故障申告</string>
+    <string name="title_fault_result">处理情况</string>
+    <string name="textViewAdditionalInfo">故障现象补充说明：</string>
+    <string name="string_fault_result_refresh_button">刷新</string>
+    <string name="textViewFaultList">您的故障申告列表：</string>
+    <string name="textViewFaultDetail">故障处理详细情况：</string>
 </resources>

@@ -22,8 +22,21 @@
         </activity>
         <activity
             android:name=".RegisterActivity"
-
-            android:label="@string/title_activity_register" >
+            android:label="@string/title_activity_register"
+            android:parentActivityName=".MainActivity" >
+        </activity>
+        <activity
+            android:name=".BindActivity"
+            android:label="@string/title_activity_bind"
+            android:parentActivityName=".MainActivity" >
+        </activity>
+        <activity
+            android:name=".FaultReportActivity"
+            android:label="@string/title_activity_fault_report"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.x.rokhdelar.xassistant.MainActivity" />
         </activity>
     </application>
 

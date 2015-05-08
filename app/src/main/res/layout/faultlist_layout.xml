@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="60dp"
+    android:orientation="horizontal">
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_weight="0.2">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/requestStateImg"
+            android:src="@mipmap/ic_unkown" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_weight="0.7">
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="3dp"
+                android:id="@+id/requestType"
+                android:text="故障申告："
+                android:textSize="18dp"
+                android:textColor="@android:color/holo_orange_dark" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/requestNum"
+                android:paddingTop="3dp"
+                android:layout_toEndOf="@id/requestType"
+                android:textSize="18dp"
+                android:text="18908259191"
+                android:textColor="@android:color/holo_orange_light"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="5dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/requestTime"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="10dp"
+                android:text="2015-3-25" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="10dp"
+                android:id="@+id/requestResult"
+                android:text="等待处理..."
+                android:layout_toEndOf="@id/requestTime"
+                android:paddingLeft="8dp"
+                android:textColor="@android:color/holo_blue_dark" />
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
+        android:layout_weight="0.1"
+        android:orientation="vertical"
+        android:gravity="right">
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text=">"
+            android:gravity="center"/>
+    </LinearLayout>
+</LinearLayout>

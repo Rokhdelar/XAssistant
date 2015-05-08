@@ -31,6 +31,7 @@ import java.util.List;
 
 public class RegisterActivity extends Activity {
     private static final String[] subStations={
+            "政企客户部",
             "城东支局",
             "城西支局",
             "李渡支局",
@@ -40,7 +41,8 @@ public class RegisterActivity extends Activity {
             "龙潭支局",
             "珍溪支局",
             "蔺市支局",
-            "新妙支局"
+            "新妙支局",
+            "网络部"
     };
 
     @Override

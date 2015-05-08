@@ -3,71 +3,18 @@
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/stringPromtNum"
-        android:id="@+id/tvTitleForNum"
-        android:layout_below="@+id/imageView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/etRequestNum"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/tvTitleForNum"
-        android:layout_alignParentLeft="true" />
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.x.rokhdelar.xassistant.MainActivity">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageView"
-        android:src="@mipmap/ic_launcher"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
-
-    <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/stringBtnSend"
-        android:id="@+id/btnSend"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/etRequestNum"
-        android:layout_alignParentLeft="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/stringListTitle"
-        android:id="@+id/textView"
-        android:layout_below="@+id/btnSend"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="30dp" />
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/btnRefresh"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:text="@string/stringBtnRefresh" />
-
+        android:background="#00000000"
+        android:src="@mipmap/ic_launcher"
+        android:id="@+id/imvTitle" />
     <ListView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/lvRequest"
-        android:layout_below="@+id/textView"
-        android:layout_above="@id/btnRefresh"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:choiceMode="none"
-        android:focusableInTouchMode="false" />
-
-
-
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/imvTitle"
+        android:id="@+id/lvMainModule"/>
 </RelativeLayout>

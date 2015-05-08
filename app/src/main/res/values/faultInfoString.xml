@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="faultInfo">
+        <item>网络中断，不能上网。</item>
+        <item>网络速度慢，网页不能打开。</item>
+        <item>终端坏，尾纤中断。</item>
+        <item>其他原因。</item>
+    </string-array>
+</resources>

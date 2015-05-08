@@ -8,14 +8,14 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/requestState"
+        android:id="@+id/requestStateImg"
         android:paddingTop="3dp"
-        android:paddingLeft="6dp"
+        android:paddingLeft="0dp"
         android:layout_alignParentLeft="true" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/requestState"
+        android:layout_toRightOf="@+id/requestStateImg"
         android:paddingTop="3dp"
         android:paddingLeft="5dp"
         android:textSize="20dp"
@@ -36,7 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/requestType"
-        android:layout_toRightOf="@id/requestState"
+        android:layout_toRightOf="@id/requestStateImg"
         android:paddingLeft="5dp"
         android:textSize="9dp"
         android:id="@+id/requestTime"

@@ -15,9 +15,9 @@
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
             android:text="@string/textViewFaultList"
+            android:background="@android:color/darker_gray"
             android:textColor="@color/bright_foreground_inverse_material_light"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:background="@color/background_material_dark"/>
+            android:textAppearance="?android:attr/textAppearanceSmall"/>
         <ListView
             android:id="@+id/listViewFaultList"
             android:layout_width="fill_parent"
@@ -36,9 +36,9 @@
             android:layout_height="wrap_content"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:background="@color/background_material_dark"
+            android:background="@android:color/darker_gray"
             android:textColor="@color/bright_foreground_inverse_material_light"
+            android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/textViewFaultDetail"/>
         <ListView
             android:id="@+id/listViewFaultDetail"
